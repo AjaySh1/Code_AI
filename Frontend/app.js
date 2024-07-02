@@ -7,134 +7,75 @@ const output = document.getElementById('output');
 
 require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.27.0/min/vs' } });
 require(['vs/editor/editor.main'], function () {
-    editor = monaco.editor.create(document.getElementById('editor'), {
-        value: '',
-        language: 'javascript',
-        theme: 'vs-dark'
-    });
+  editor = monaco.editor.create(document.getElementById('editor'), {
+    value: '',
+    language: 'javascript',
+    theme: 'vs-dark'
+  });
 });
 
 convertBtn.addEventListener('click', async () => {
-    const code = editor.getValue();
-    const selectedLanguage = languageSelect.value;
+  const code = editor.getValue();
+  const selectedLanguage = languageSelect.value;
 
-    try {
-        toggleOutputLoader(true); // Show the loading spinner
-        const convertedCode = await convertCodeToLanguage(code, selectedLanguage);
-        output.textContent = `Converted code in ${selectedLanguage}:\n${convertedCode}`;
-    } catch (error) {
-        output.textContent = 'Error converting code.';
-        console.error('Error generating code conversion:', error.message);
-    } finally {
-        toggleOutputLoader(false); // Hide the loading spinner
-    }
+  try {
+    toggleOutputLoader(true); // Show the loading spinner
+    const response = await fetch('http://localhost:3000/convert-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, targetLanguage: selectedLanguage }),
+    });
+    const data = await response.json();
+    output.textContent = `Converted code in ${selectedLanguage}:\n${data.convertedCode}`;
+  } catch (error) {
+    output.textContent = 'Error converting code.';
+    console.error('Error generating code conversion:', error.message);
+  } finally {
+    toggleOutputLoader(false); // Hide the loading spinner
+  }
 });
 
 debugBtn.addEventListener('click', async () => {
-    const code = editor.getValue();
-    
-    try {
-        toggleOutputLoader(true); // Show the loading spinner
-        const convertedCode = await DebugCode(code);
-        output.textContent = `Debugging...:\n${convertedCode}`;
-    } catch (error) {
-        output.textContent = 'Error converting code.';
-        console.error('Error generating code conversion:', error.message);
-    } finally {
-        toggleOutputLoader(false); // Hide the loading spinner
-    }
+  const code = editor.getValue();
+
+  try {
+    toggleOutputLoader(true); // Show the loading spinner
+    const response = await fetch('http://localhost:3000/debug-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    const data = await response.json();
+    output.textContent = `Debugging...:\n${data.debuggedCode}`;
+  } catch (error) {
+    output.textContent = 'Error debugging code.';
+    console.error('Error debugging code:', error.message);
+  } finally {
+    toggleOutputLoader(false); // Hide the loading spinner
+  }
 });
 
 qualityBtn.addEventListener('click', async () => {
-    const code = editor.getValue();
+  const code = editor.getValue();
 
-    try {
-        toggleOutputLoader(true); // Show the loading spinner
-        const convertedCode = await QualityCode(code);
-        output.textContent = `Checking code quality...:\n${convertedCode}`;
-    } catch (error) {
-        output.textContent = 'Error converting code.';
-        console.error('Error generating code conversion:', error.message);
-    } finally {
-        toggleOutputLoader(false); // Hide the loading spinner
-    }
+  try {
+    toggleOutputLoader(true); // Show the loading spinner
+    const response = await fetch('http://localhost:3000/check-code-quality', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    const data = await response.json();
+    output.textContent = `Checking code quality...:\n${data.qualityReport}`;
+  } catch (error) {
+    output.textContent = 'Error checking code Complexity.';
+    console.error('Error checking code Complexity:', error.message);
+  } finally {
+    toggleOutputLoader(false); // Hide the loading spinner
+  }
 });
 
 function toggleOutputLoader(show) {
-    const outputLoader = document.getElementById('output-loader');
-    if (show) {
-        outputLoader.style.display = 'block';
-    } else {
-        outputLoader.style.display = 'none';
-    }
+  const outputLoader = document.getElementById('output-loader');
+  outputLoader.style.display = show ? 'block' : 'none';
 }
-
-async function convertCodeToLanguage(inputCode, targetLanguage) {
-    const url = 'https://code-converter-be.onrender.com/convert-code';
-    const data = {
-        code: inputCode,
-        targetLanguage: targetLanguage
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const responseData = await response.json();
-        return responseData.convertedCode;
-    } catch (error) {
-        console.error('Error converting code:', error.message);
-        throw error;
-    }
-}
-
-async function DebugCode(inputCode) {
-    const url = 'https://code-converter-be.onrender.com/debug-code';
-    const data = {
-        code: inputCode,
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const responseData = await response.json();
-        return responseData.convertedCode;
-    } catch (error) {
-        console.error('Error converting code:', error.message);
-        throw error;
-    }
-}
-async function QualityCode(inputCode) {
-    const url = 'https://code-converter-be.onrender.com/check-code-quality';
-    const data = {
-        code: inputCode,
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const responseData = await response.json();
-        return responseData.convertedCode;
-    } catch (error) {
-        console.error('Error converting code:', error.message);
-        throw error;
-    }
-}
-
