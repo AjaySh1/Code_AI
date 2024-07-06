@@ -52,7 +52,7 @@ app.post('/debug-code', async (req, res) => {
 app.post('/check-code-quality', async (req, res) => {
     try {
         const { code } = req.body;
-        const qualityReport = await processCodeWithGenerativeAI(code, 'give me the time &space complexity of the given code with explaination in precise words.  :');
+        const qualityReport = await processCodeWithGenerativeAI(code, 'give me the time &space complexity of the given code with explaination atmost 50 words.  :');
         res.json({ qualityReport });
     } catch (error) {
         console.error('Error checking code Complexity:', error.message);
