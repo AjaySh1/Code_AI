@@ -11,7 +11,7 @@ Welcome to **Code_AI**, an innovative project designed to harness the power of A
 
 ## Tech Stack
 
-- **Backend**: JavaScript
+- **Backend**: JavaScript ,Node.js,Express.js
 - **Frontend**: HTML, CSS
 - **Dependencies**: Managed via `package.json`
 
