@@ -30,7 +30,8 @@ const processCodeWithGenerativeAI = async (code, prompt) => {
 app.post('/convert-code', async (req, res) => {
     try {
         const { code, targetLanguage } = req.body;
-        const convertedCode = await processCodeWithGenerativeAI(code, `Convert the following code to ${targetLanguage}: give me code only no explaination . use proper formatting and dont return me ## or **`);
+        const convertedCode = await processCodeWithGenerativeAI(code, `Convert the following code to ${targetLanguage}:   Provide only the converted code, no headings, no explanations, and no additional text. Ensure proper formatting and do not include any comments or other text.
+`);
         res.json({ convertedCode });
     } catch (error) {
         console.error('Error converting code:', error.message);

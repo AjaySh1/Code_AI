@@ -85,7 +85,13 @@ body {
     padding: 15px;
     background-color: rgba(8, 1, 1, 0.7);
     border-radius: 20px;
+
  
+}
+.opt {
+    margin-top: 10px;
+    padding-right: 10px;
+  
 }
 
 #controls select,
@@ -98,6 +104,7 @@ body {
     outline: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     animation: border-animation 20s ease infinite alternate, background-animation 20s ease infinite alternate;
+    width: 6rem;
 }
 
 #controls select {
@@ -137,8 +144,13 @@ body {
 
     transform: translateY(-2px);
 }
+#language-select{
+  font-size: larger;
+}
+
 #language-select option{
     background-color: #4a4e69;
+    font-size: 10px;
 }
 
 
@@ -206,3 +218,29 @@ body {
         margin-top: 15px;
     }
 }
+
+
+.copy-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    
+    cursor: pointer;
+    padding: 6px 6px;
+ 
+  }
+  
+  .copy-btn:hover {
+    background-color: #45a049;
+  }
+  .opt button{
+    width: 100px;
+  }
+
+
+  #output-container {
+    position: relative;
+    padding-top: 40px; /* Adjust based on the button's height + margin */
+  }
+  
+  
